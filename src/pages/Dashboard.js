@@ -24,7 +24,7 @@ export default function Dashboard() {
 
         async function getAnalysisData()
         {
-            const analysisData = await fetch('/api/login', {
+            const analysisData = await fetch('https://gmb-wkeo.onrender.com/api/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

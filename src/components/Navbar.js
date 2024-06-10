@@ -22,7 +22,7 @@ export default function Navbar( props ) {
   useEffect(() => {
     async function getAllDoctrosNames()
     {
-      const docNames = await fetch(api + '/getAllDocNames', {
+      const docNames = await fetch('https://gmb-wkeo.onrender.com' + api + '/getAllDocNames', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -77,8 +77,8 @@ export default function Navbar( props ) {
         <div className="nav-contents p-2">
           <Link to="/Dashboard" className="p-1 pe-5">Dashboard</Link>
           <Link to="/Doc-report" className="p-1 pe-5">Doc Report</Link>
-          <Link to="/Review Management" className="p-1 pe-5">Review Management</Link>
-          <Link to="/gen-ai" className="p-1 pe-5">Gen AI</Link>
+          <Link to="/Review Management" className="p-1 pe-5" style={{display: (props.username === 'Manipal' && props.serach ? 'none' : 'block')}}>Review Management</Link>
+          <Link to="/gen-ai" className="p-1 pe-5" style={{display: (props.username === 'Manipal' && props.serach ? 'none' : 'block')}}>Gen AI</Link>
         </div>
       </div>
     </Fragment>

@@ -15,7 +15,7 @@ export default function BasicDetailsComponent() {
   useEffect(() => {
     if (getDrName) {
       async function getDocData() {
-        const response = await fetch(api + '/docData', {
+        const response = await fetch('https://gmb-wkeo.onrender.com' + api + '/docData', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'

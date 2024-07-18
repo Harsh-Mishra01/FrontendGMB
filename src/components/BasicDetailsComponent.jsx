@@ -1,8 +1,10 @@
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useEffect, useState, useContext, useRef } from 'react'
 import '../stylesheets/docreport.css'
 import TableComponent from '../components/TableComponent'
 import GraphicalContainer from './GraphicalContainer'
 import { SharedContext } from '../context/SharedContext'
+import html2canvas from 'html2canvas'
+import jsPDF from 'jspdf'
 
 export default function BasicDetailsComponent() {
   const [ docData, setDocData ] = useState()
@@ -10,12 +12,10 @@ export default function BasicDetailsComponent() {
   var ratingsuggestion = ""
   const api = localStorage.getItem( 'API' )
   
-  // alert(api)
-
   useEffect(() => {
     if (getDrName) {
       async function getDocData() {
-        const response = await fetch('https://gmb-wkeo.onrender.com' + api + '/docData', {
+        const response = await fetch(api + '/docData', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -88,11 +88,63 @@ export default function BasicDetailsComponent() {
     //   alert(topreview_body.length)
     // }
   }
+
+
+  
+  // const [loader, setLoader] = useState(false);
+  
+  // const downloadPDF = () =>{
+  //   const input = document.querySelector('#capture')
+    
+  //   html2canvas(input).then((canvas)=>{
+  //     const imgData = canvas.toDataURL('img/png');
+  //     const doc = new jsPDF('p','mm','a4',true);
+  //     const docWidth = doc.internal.pageSize.getWidth();
+  //     const docHeight = doc.internal.pageSize.getHeight();
+  //     const imgWidth = canvas.width;
+  //     const imgHeight = canvas.height;
+  //     const ratio =Math.min(docWidth/ imgWidth, docHeight/ imgHeight )
+  //     const imgX = (docWidth - imgWidth * ratio)
+  //     const imgY = 30;
+  //     doc.addImage(imgData, 'PNG', imgX, imgY, imgWidth*ratio, imgHeight*ratio );
+  //     doc.addImage(imgData, 'PNG', 0, 0, docWidth, docHeight );
+      
+  //     doc.save('./docreport.pdf')
+  //   })
+  // }
+
+  const downloadPDF = () => {
+    const input = document.querySelector('#capture');
+    
+    
+    const scale = 2;
+  
+    html2canvas(input, { scale: scale }).then((canvas) => {
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      
+    
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = pdf.internal.pageSize.getHeight();
+      const imgWidth = canvas.width / scale;
+      const imgHeight = canvas.height / scale;
+      const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
+  
+      const imgX = (pdfWidth - imgWidth * ratio) / 2;
+      const imgY = (pdfHeight - imgHeight * ratio) / 2;
+  
+      pdf.addImage(imgData, 'PNG', imgX, imgY, imgWidth * ratio, imgHeight * ratio);
+      pdf.save('docreport.pdf');
+    });
+  };
+
+  
+
   return (
     <>
       {
         getDrName && 
-        <>
+        <div id='capture'>
         <div className="maniContainer p-3 m-3">
           <div className='details'>
             <div className="basi-details">
@@ -112,8 +164,11 @@ export default function BasicDetailsComponent() {
               </div>
             </div>
             <div className='p-2 download'>
-              <button className='download-btn'>Download Report</button>
+              <button className='download-btn' onClick={downloadPDF}>Download Report</button>
             </div>
+            {/* <div className='p-2 download'>
+              <button onClick={downloadPDF} className='download-btn'>Download Report</button>
+            </div> */}
           </div>
           {
             rows.length !== 0 && (
@@ -157,6 +212,9 @@ export default function BasicDetailsComponent() {
             </div>
           </>
         }
+
+
+<div style={{ pageBreakBefore: 'always' }}></div>
         
         <div className="maniContainer p-3 m-3">
           <h5>Analytics</h5>
@@ -180,6 +238,9 @@ export default function BasicDetailsComponent() {
             )
           }
         </div>
+
+      
+
           
         <div className="maniContainer p-3 m-3">
           <h5>Review & Rating</h5>
@@ -225,7 +286,7 @@ export default function BasicDetailsComponent() {
                         <h6>Total Rating</h6>
                         { docData.basicDetails && 
                           <>
-                            <span>{docData.basicDetails[0].averageRating}</span><br />
+                            <span>{docData.basicDetails[0].averageRating.toFixed(1)}</span><br />
                             <span>{ratingsuggestion}</span>
                             <h6 className='mt-3'>Total Reviews</h6>
                             <span>{docData.basicDetails[0].totalReviewCount}</span><br />
@@ -239,7 +300,7 @@ export default function BasicDetailsComponent() {
             )
           }
         </div>
-        </>
+        </div>
         
       }
     </>

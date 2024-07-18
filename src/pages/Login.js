@@ -17,7 +17,7 @@ export default function Login(props) {
   {
     e.preventDefault()
     console.log(cred)
-    const loginHandeler = await fetch('https://gmb-wkeo.onrender.com/api/login', {
+    const loginHandeler = await fetch('/api/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

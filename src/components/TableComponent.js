@@ -23,7 +23,6 @@ export default function TableComponent(props) {
                                 <tr>
                                     {item.map((counts) => {
                                         return (<td>{counts}</td>)
-                                        
                                     })}
                                 </tr>
                             </>

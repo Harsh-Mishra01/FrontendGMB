@@ -5,7 +5,7 @@ export default function ReviewRating(props) {
     <>
         
         <div className="vertical-card p-3">
-            All Time (Jan 01, 2024 - March 31, 2024)
+            All Time
             <center className="m-4"><h4>Overall</h4></center>
             <div className="rating-container m-1">
                 <div className="rate-heading">

@@ -8,7 +8,7 @@ export default function ReviewManagement() {
     useEffect(() => {
         if (getDrName) {
         async function getDocData() {
-            const response = await fetch('https://gmb-wkeo.onrender.com' + api + '/docData', {
+            const response = await fetch(api + '/docData', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -22,6 +22,6 @@ export default function ReviewManagement() {
         }
     }, [getDrName])
     return (
-        <div>REVIEW</div>
+        <div></div>
     )
 }
